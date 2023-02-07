@@ -3,13 +3,17 @@
 var btn = Array.from(document.getElementsByClassName("btn"));
 var input = document.getElementById("input");
 var sign = ["-", "+", "x", "/", "%", "power", "root"];
+var del = document.getElementById("del");
+var op = Array.from(document.getElementsByClassName("op"));
 var firstNum = "";
 var secondNum = "";
 var operation = "";
 var equation = "";
-console.log(btn, input);
+var flag = false;
+console.log(btn, input, flag);
 console.log(btn.innerText);
-
+console.log(flag);
+console.log(op);
 //divide
 function divide(x, y) {
   return (input.innerText = x / y);
@@ -44,22 +48,42 @@ function squareRoot(x) {
 function power(x, y) {
   return (input.innerText = Math.pow(x, y));
 }
+//delete
+del.addEventListener("click", function () {
+  window.location.reload();
+});
 
 function addnum(num) {
-
   num.addEventListener("click", function (e) {
-    
-    input.innerText += num.innerText;
-  //   if(num.innerText==='AC' && input.innerText){
-  //  console.log(input.innerText,num.innerText);
-  //     input.innerText = ''
-  //   }
+ 
+    if (!input.innerText) {
+      flag = true;
+    }
+    if (input.innerText) {
+      flag = false;
+    }
+    if (flag == true && num.innerText === "-") {
+      input.innerText = num.innerText;
+      console.log(flag);
+    }
+    if (flag == true && num.innerText <= 9) {
+      input.innerText = num.innerText;
+      console.log(flag);
+    }
+    if (flag == false) {
+      input.innerText += num.innerText;
+    }
 
     for (i = 0; i < sign.length; i++) {
       if (input.innerText && num.innerText == sign[i]) {
         operation = sign[i];
+        //disaple other operationss
+        op.map(function (eachOp) {
+          eachOp.style.pointerEvents= 'none';
+        });
       }
     }
+
     if (num.innerText == "=") {
       var equationTrim = input.innerText.substring(
         0,
@@ -69,7 +93,7 @@ function addnum(num) {
     }
     firstNum = equation[0];
     secondNum = equation[1];
-
+    console.log(firstNum, secondNum);
     //negative operation
     if (operation === "-" && firstNum && secondNum) {
       console.log(operation, firstNum, secondNum);
